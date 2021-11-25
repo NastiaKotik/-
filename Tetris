@@ -178,3 +178,366 @@ empty = true; // звільняємо поле, а 1 перетворюємо в
 
 for(int i = N - 1; i > 0; i--)
 
+{
+
+for(int j = 0; j < M; j++) if(matr[i][j] == 1) matr[i][j] = 2;
+
+}
+
+}
+
+else
+
+{
+
+for(int i = N - 1; i > 0; i--)
+
+{
+
+for(int j = 0; j < M; j++)
+
+if(matr[i - 1][j] == 1)
+
+{
+
+matr[i][j] = matr[i - 1][j];
+
+matr[i - 1][j] = 0;
+
+}
+
+}
+
+}
+
+}
+
+void fieldFigures :: moveLeft() // блок-схема 1
+
+{
+
+if( canMoveLeft() ) // якщо не можемо опустити фігурку
+
+{
+
+for(int i = N - 1; i > 0; i--)
+
+{
+
+for(int j = 0; j < M - 1; j++)
+
+if(matr[i][j+1] == 1)
+
+{
+
+matr[i][j] = matr[i][j+1];
+
+matr[i][j+1] = 0;
+
+}
+
+}
+
+}
+
+}
+
+void fieldFigures :: moveRight() // блок-схема 1
+
+{
+
+if( canMoveRight() ) // якщо не можемо опустити фігурку
+
+{
+
+for(int i = N - 1; i > 0; i--)
+
+{
+
+for(int j = M - 1; j > 0; j--)
+
+if(matr[i][j - 1] == 1)
+
+{
+
+matr[i][j] = matr[i][j - 1];
+
+matr[i][j - 1] = 0;
+
+}
+
+}
+
+}
+
+}
+
+bool fieldFigures :: isLine()
+
+{
+
+return false;
+
+}
+
+int fieldFigures :: isDraw(int i, int j)
+
+{
+
+return matr[i][j] == 0 ? false : true;
+
+}
+
+void fieldFigures::Show(TCanvas *can)
+
+{
+
+can->Pen->Color = clBlack;
+
+for(int i = 0; i < N; i++)
+
+{
+
+for(int j = 0; j < M; j++)
+
+if(isDraw(i, j))
+
+{
+
+can->Rectangle(j * getWidth(), i * getHeight(),
+
+(j + 1) * getWidth(), (i + 1) * getHeight());
+
+}
+
+}
+
+}
+
+void fieldFigures::Hide(TCanvas *can)
+
+{
+
+can->Pen->Color = clWhite;
+
+for(int i = 0; i < N; i++)
+
+{
+
+for(int j = 0; j < M; j++)
+
+if(isDraw(i, j))
+
+{
+
+can->Rectangle(j * getWidth(), i * getHeight(),
+
+(j + 1) * getWidth(), (i + 1) * getHeight());
+
+}
+
+}
+
+}
+
+void fieldFigures :: newFigure()
+
+{
+
+empty = false;
+
+int Num = fig->getRand(MAX_FIG);
+
+for(int i = 0; i < 3; i++)
+
+{
+
+for(int j = 3; j < 6; j++)
+
+{
+
+if(matr[i][j] + figArr[Num][i][j - 3] <= 1) // якщо не можемо вставити фігурку
+
+{
+
+matr[i][j] += figArr[Num][i][j - 3];
+
+}
+
+else gameOver();
+
+}
+
+}
+
+}
+
+void fieldFigures :: gameOver()
+
+{
+
+// ShowMessage("Game Over!!!");
+
+}
+
+bool fieldFigures :: canMove() // блок-схема 2
+
+{
+
+bool res = true;
+
+// спочатку перевіряємо нижній рядок на наявність 1
+
+for(int j = 0; j < M; j++)
+
+if(matr[N-1][j] == 1)
+
+{
+
+res = false; break;
+
+}
+
+if(!res) return res;
+
+else
+
+{
+
+// перевіряємо весь масив на 2
+
+for(int i = N - 2; i >= 0; i--)
+
+{
+
+for(int j = 0; j < M; j++)
+
+{
+
+if((matr[i][j] == 1) && (matr[i+1][j] == 2))
+
+{
+
+res = false;
+
+break;
+
+}
+
+}
+
+}
+
+return res;
+
+}
+
+}
+
+bool fieldFigures :: canMoveLeft() // блок-схема 2
+
+{
+
+bool res = true;
+
+// спочатку перевіряємо 0 стовпець на наявність 1
+
+for(int i = 0; i < N; i++)
+
+if(matr[i][0] == 1)
+
+{
+
+res = false; break;
+
+}
+
+if(!res) return res;
+
+else
+
+{
+
+// перевіряємо весь масив на 2
+
+for(int i = N - 1; i >= 0; i--)
+
+{
+
+for(int j = 1; j < M; j++)
+
+{
+
+if((matr[i][j] == 1) && (matr[i][j-1] == 2))
+
+{
+
+res = false;
+
+break;
+
+}
+
+}
+
+}
+
+return res;
+
+}
+
+}
+
+bool fieldFigures :: canMoveRight() // блок-схема 2
+
+{
+
+bool res = true;
+
+// спочатку перевіряємо M стовпець на наявність 1
+
+for(int i = 0; i < N; i++)
+
+if(matr[i][M-1] == 1)
+
+{
+
+res = false; break;
+
+}
+
+if(!res) return res;
+
+else
+
+{
+
+// перевіряємо весь масив на 2
+
+for(int i = N - 1; i >= 0; i--)
+
+{
+
+for(int j = 0; j < M - 1; j++)
+
+{
+
+if((matr[i][j] == 1) && (matr[i][j+1] == 2))
+
+{
+
+res = false;
+
+break;
+
+}
+
+}
+
+}
+
+return res;
+
+}
+
+}
