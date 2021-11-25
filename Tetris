@@ -1,0 +1,180 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+
+#pragma hdrstop
+
+#include "game.h"
+
+//---------------------------------------------------------------------------
+
+#pragma package(smart_init)
+
+#pragma resource "*.dfm"
+
+TForm3 *Form3;
+
+//---------------------------------------------------------------------------
+
+__fastcall TForm3::TForm3(TComponent* Owner)
+
+: TForm(Owner)
+
+{
+
+}
+
+//---------------------------------------------------------------------------
+
+void __fastcall TForm3::Timer1Timer(TObject *Sender)
+
+{
+
+// перемалювати сцену
+
+if(fld->isEmpty())
+
+{
+
+fld->newFigure();
+
+}
+
+fld->Hide(Image2->Canvas);
+
+fld->moveDown();
+
+fld->Show(Image2->Canvas);
+
+}
+
+//---------------------------------------------------------------------------
+
+void __fastcall TForm3::Button1Click(TObject *Sender)
+
+{
+
+// fld->Show(Image2->Canvas);
+
+}
+
+//---------------------------------------------------------------------------
+
+void __fastcall TForm3::Button2Click(TObject *Sender)
+
+{
+
+Timer1->Enabled = false;
+
+}
+
+//---------------------------------------------------------------------------
+
+void __fastcall TForm3::Label4Click(TObject *Sender)
+
+{
+
+Timer1->Enabled = true;
+
+fld = new fieldFigures(Image2->Width / 10, Image2->Height / 20);
+
+}
+
+//---------------------------------------------------------------------------
+
+void __fastcall TForm3::Label5Click(TObject *Sender)
+
+{
+
+Timer1->Enabled = false;
+
+}
+
+//---------------------------------------------------------------------------
+
+void __fastcall TForm3::FormKeyDown(TObject *Sender, WORD &Key,
+
+TShiftState Shift)
+
+{
+
+switch(Key)
+
+{
+
+case 37: fld->Hide(Image2->Canvas);
+
+fld->moveLeft();
+
+fld->Show(Image2->Canvas);
+
+break;
+
+case 39:
+
+fld->Hide(Image2->Canvas);
+
+fld->moveRight(); break;
+
+fld->Show(Image2->Canvas);
+
+}
+
+}
+
+//---------------------------------------------------------------------------
+
+Лістинг А.2 - модуль field.cpp
+
+//---------------------------------------------------------------------------
+
+#pragma hdrstop
+
+#include "field.h"
+
+//---------------------------------------------------------------------------
+
+#pragma package(smart_init)
+
+fieldFigures :: fieldFigures(int w, int h)
+
+{
+
+width = w;
+
+height = h;
+
+empty = true; // знак того, що поле не зайняте
+
+fig = new Figures();
+
+//ініціалізуємо масив поля
+
+for(int i = 0; i < N; i++)
+
+{
+
+for(int j = 0; j < M; j++)
+
+{
+
+matr[i][j] = 0;
+
+}
+
+}
+
+}
+
+void fieldFigures :: moveDown() // блок-схема 1
+
+{
+
+if( !canMove() ) // якщо не можемо опустити фігуру
+
+{
+
+empty = true; // звільняємо поле, а 1 перетворюємо в 2
+
+for(int i = N - 1; i > 0; i--)
+
